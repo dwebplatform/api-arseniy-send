@@ -1,21 +1,17 @@
+
 module.exports = (sequelize, Sequelize) => {
-  const Coach = sequelize.define("coaches", {
+  const Game = sequelize.define("games", {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true // Automatically gets converted to SERIAL for postgres
     },
     name: {
-      type: Sequelize.STRING,
-    },
-    login: {
       type: Sequelize.TEXT,
     },
-    timeZone: {
-      type: Sequelize.TEXT
-    }
+
   },
   );
 
-  return Coach;
+  return Game;
 };

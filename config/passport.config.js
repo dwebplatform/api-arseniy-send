@@ -14,32 +14,32 @@ const { PolimorphContainer } = require('../polimorphs');
 // opts.audience = 'yoursite.net';
 // create jwt strategy 
 module.exports = passport => {
-    passport.use(
-        new JwtStrategy(opts, (req, jwt_payload, done) => {
-            userFireWall(req, jwt_payload, done);
-        })
-    );
+  passport.use(
+    new JwtStrategy(opts, (req, jwt_payload, done) => {
+      userFireWall(req, jwt_payload, done);
+    })
+  );
 };
 async function userFireWall(req, jwt_payload, done) {
-    let findedUser = await User.findOne({
-        where: {
-            id: jwt_payload.id
-        }
-    }).catch((e) => {
-        done(null, false)
-    });
-    if (findedUser) {
-        try {
-            req.user = await PolimorphContainer[jwt_payload.type].findOne({
-                where: {
-                    id: findedUser.entity_id
-                }
-            });
-            return done(null, req.user);
-        } catch (e) {
-            return done(null, false)
-        }
-    } else {
-        return done(null, false)
+  let findedUser = await User.findOne({
+    where: {
+      id: jwt_payload.id
     }
+  }).catch((e) => {
+    done(null, false)
+  });
+  if (findedUser) {
+    try {
+      req.user = await PolimorphContainer[jwt_payload.type].findOne({
+        where: {
+          id: findedUser.entity_id
+        }
+      });
+      return done(null, req.user);
+    } catch (e) {
+      return done(null, false)
+    }
+  } else {
+    return done(null, false)
+  }
 }
